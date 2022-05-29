@@ -97,7 +97,7 @@ const generateData = async (count = null) => {
     console.log(red(`Can't write data to file...`));
     process.exit(PROCESS_CODES.ERROR);
   }
- };
+};
 
 module.exports = {
   start(count) {
