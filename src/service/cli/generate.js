@@ -1,6 +1,7 @@
 'use strict';
 
-const fs = require(`fs`);
+const fs = require(`fs`).promises;
+const {red, green} = require(`chalk`);
 
 const {
   PROCESS_CODES,
@@ -78,26 +79,25 @@ const createArticleObject = () => {
   };
 };
 
-const generateData = (count = null) => {
+const generateData = async (count = null) => {
   let articlesCount = Number.parseInt(count, 10) || GENERATE_AMOUNT.MIN;
   if (articlesCount > 1000) {
-    console.error(`Не больше 1000 публикаций`);
+    console.log(red(`Not more that 1000 elements`));
     process.exit(1);
   }
   if (articlesCount === 0) {
     articlesCount = GENERATE_AMOUNT.MIN;
   }
   const data = JSON.stringify(Array.from({length: articlesCount}, createArticleObject));
-  fs.writeFile(FILE_NAME, data, (err) => {
-    if (err) {
-      console.error(`Can't write data to file...`);
-      process.exit(PROCESS_CODES.ERROR);
-    }
-
-    console.info(`Operation success. File created.`);
+  try {
+    await fs.writeFile(FILE_NAME, data);
+    console.log(green(`Operation success. File was created.`));
     process.exit(PROCESS_CODES.SUCCESS);
-  });
-};
+  } catch (error) {
+    console.log(red(`Can't write data to file...`));
+    process.exit(PROCESS_CODES.ERROR);
+  }
+ };
 
 module.exports = {
   start(count) {
