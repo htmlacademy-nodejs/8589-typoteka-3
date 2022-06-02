@@ -5,8 +5,9 @@
   "main": "./src/service/service.js",
   "scripts": {
     "test": "npm run eslint",
-    "start": "node ./src/service/service.js",
-    "eslint": "eslint --ext .js src/"
+    "start": "nodemon ./src/service/service.js --server 3000",
+    "eslint": "eslint --ext .js src/",
+    "generate": "node ./src/service/service.js --generate"
   },
   "repository": {
     "type": "git",
@@ -21,7 +22,8 @@
   "homepage": "https://github.com/stakeout/8589-typoteka-3#readme",
   "devDependencies": {
     "eslint": "8.16.0",
-    "eslint-config-htmlacademy": "0.6.0"
+    "eslint-config-htmlacademy": "0.6.0",
+    "nodemon": "2.0.16"
   },
   "dependencies": {
     "chalk": "4.1.2"

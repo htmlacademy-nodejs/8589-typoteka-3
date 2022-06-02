@@ -7,7 +7,8 @@ const {
   getRandomInt,
   getRandomIndexFromArray,
   shuffle,
-  getRandomDateBeforeDate
+  getRandomDateBeforeDate,
+  readContent
 } = require(`../../utils`);
 
 const FILE_SENTENCES_PATH = `./data/sentences.txt`;
@@ -21,16 +22,6 @@ const GENERATE_AMOUNT = {
   ANNOUNCEMENT_MAX_LENGTH: 5,
 };
 
-
-const readContent = async (filePath) => {
-  try {
-    const content = await fs.readFile(filePath, `utf8`);
-    return content.trim().split(`\n`);
-  } catch (err) {
-    console.error(red(err));
-    return [];
-  }
-};
 const createArticleObject = (titles, categories, texts) => {
   return {
     title: `${getRandomIndexFromArray(titles)}`,
@@ -52,9 +43,8 @@ const generateData = async (count = null) => {
   }
 
   try {
-    const [titles, categories, texts] = await Promise.all([readContent(FILE_TITLES_PATH), readContent(FILE_CATEGORIES_PATH), readContent(FILE_SENTENCES_PATH)]).catch((err) => console.log(err));
-    const bindData = createArticleObject.bind(null, titles, categories, texts);
-    const data = JSON.stringify(Array.from({length: articlesCount}, bindData));
+    const [titles, categories, texts] = await Promise.all([readContent(FILE_TITLES_PATH), readContent(FILE_CATEGORIES_PATH), readContent(FILE_SENTENCES_PATH)]);
+    const data = JSON.stringify(Array.from({length: articlesCount}, createArticleObject.bind(null, titles, categories, texts)));
     await fs.writeFile(FILE_NAME, data);
     console.log(green(`Operation success. File was created.`));
     process.exit(PROCESS_CODES.SUCCESS);
