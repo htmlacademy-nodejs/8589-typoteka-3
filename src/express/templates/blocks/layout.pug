@@ -1,0 +1,13 @@
+include ../blocks/header
+include ../blocks/footer
+
+doctype html
+html(lang='ru')
+  include ../blocks/head
+  body
+    .wrapper-color
+      +header
+      block content
+      +footer
+    <script src="js/vendor.js"></script>
+    <script src="js/main.js"></script>
